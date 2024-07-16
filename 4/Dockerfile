@@ -59,3 +59,42 @@ USER	adminer
 CMD	[ "php", "-S", "[::]:8080", "-t", "/var/www/html" ]
 
 EXPOSE 8080
+
+# # support oracle
+USER root
+
+ENV ORACLE_BASE     /usr/local/oracle
+ENV LD_LIBRARY_PATH /usr/local/oracle/instantclient_19_23:/lib
+ENV TNS_ADMIN       /usr/local/oracle/instantclient_19_23/network/admin
+ENV ORACLE_HOME     /usr/local/oracle/instantclient_19_23
+
+RUN apk update && apk upgrade --available && \
+  apk add --no-cache bash autoconf build-base composer libaio libnsl libc6-compat busybox-extras curl && \
+  ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2 && \
+  ln -s /usr/lib/libnsl.so.2 /usr/lib/libnsl.so.1 && \
+  /var/cache/apk/*  && \
+  cd /tmp
+
+# # Install Oracle Client and build OCI8 (Oracle Command Interface 8 - PHP extension)
+RUN \
+## Download and unarchive Instant Client v19.23
+  mkdir            /usr/local/oracle && \
+  curl -o          /tmp/sdk.zip            https://download.oracle.com/otn_software/linux/instantclient/1923000/instantclient-sdk-linux.arm64-19.23.0.0.0dbru.zip && \
+  curl -o          /tmp/basic_lite.zip     https://download.oracle.com/otn_software/linux/instantclient/1923000/instantclient-basiclite-linux.arm64-19.23.0.0.0dbru.zip && \
+  curl -o          /tmp/sqlplus.zip        https://download.oracle.com/otn_software/linux/instantclient/1923000/instantclient-sqlplus-linux.arm64-19.23.0.0.0dbru.zip && \                     
+  unzip -o -d      /usr/local/oracle       /tmp/sdk.zip && \
+  unzip -o -d      /usr/local/oracle       /tmp/basic_lite.zip  && \
+  unzip -o -d      /usr/local/oracle       /tmp/sqlplus.zip && \
+  rm -rf           /tmp/*.zip && \
+  mkdir            /etc/php.d && \
+  echo "extension=oci8.so" > /etc/php.d/instantclient.ini && \
+
+## Build OCI8 with PECL
+RUN \
+  C_INCLUDE_PATH=/usr/local/oracle/instantclient_19_23/sdk/include/ docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/local/oracle/instantclient_19_23 && docker-php-ext-install oci8
+
+#  Clean up
+RUN \
+  rm -rf /tmp/*.zip /var/cache/apk/* /tmp/pear/
+
+USER adminer
