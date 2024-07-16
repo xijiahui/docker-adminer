@@ -10,14 +10,13 @@ jobs:
       matrix:
         variant:
         - "4"
-        - "4/fastcgi"
     steps:
     - uses: actions/checkout@v1
     - name: Build the image.
       id: build
       run: |
         printf "::group::Sending context\n"
-        IMAGE=adminer:${VARIANT/\//-}-$(date +%s)
+        IMAGE=adminer:4.8.1-alpine
         docker build "$VARIANT" --tag "$IMAGE" |sed 's/^Step/::endgroup::\n::group::Step/'
         printf "::endgroup::\n"
         printf "::set-output name=%s::%s\n" "image" "$IMAGE"
