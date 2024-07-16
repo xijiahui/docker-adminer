@@ -87,7 +87,7 @@ RUN \
   unzip -o -d      /usr/local/oracle       /tmp/sqlplus.zip && \
   rm -rf           /tmp/*.zip && \
   mkdir            /etc/php.d && \
-  echo "extension=oci8.so" > /etc/php.d/instantclient.ini && \
+  echo "extension=oci8.so" > /etc/php.d/instantclient.ini
 
 ## Build OCI8 with PECL
 RUN \
