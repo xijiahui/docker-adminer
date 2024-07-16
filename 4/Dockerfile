@@ -72,7 +72,7 @@ RUN apk update && apk upgrade --available && \
   apk add --no-cache bash autoconf build-base composer libaio libnsl libc6-compat busybox-extras curl && \
   ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2 && \
   ln -s /usr/lib/libnsl.so.2 /usr/lib/libnsl.so.1 && \
-  /var/cache/apk/*  && \
+  rm -rf /var/cache/apk/*  && \
   cd /tmp
 
 # # Install Oracle Client and build OCI8 (Oracle Command Interface 8 - PHP extension)
