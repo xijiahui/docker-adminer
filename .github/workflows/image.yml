@@ -16,7 +16,7 @@ jobs:
       id: build
       run: |
         printf "::group::Sending context\n"
-        IMAGE=adminer:4.8.1-alpine
+        IMAGE=adminer:4.8.1-oracle_x64
         docker build "$VARIANT" --tag "$IMAGE" |sed 's/^Step/::endgroup::\n::group::Step/'
         printf "::endgroup::\n"
         printf "::set-output name=%s::%s\n" "image" "$IMAGE"
