@@ -69,7 +69,7 @@ ENV TNS_ADMIN       /usr/local/oracle/instantclient_19_23/network/admin
 ENV ORACLE_HOME     /usr/local/oracle/instantclient_19_23
 
 RUN apk update && apk upgrade --available && \
-  apk add --no-cache autoconf g++ maker composer libaio libnsl libc6-compat curl && \
+  apk add --no-cache bash autoconf build-base composer libaio libnsl libc6-compat busybox-extras curl && \
   ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2 && \
   ln -s /lib64/ld-linux-x86-64.so.2 /usr/lib/ld-linux-x86-64.so.2 && \
   ln -s /usr/lib/libnsl.so.2 /usr/lib/libnsl.so.1 && \
