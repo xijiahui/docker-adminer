@@ -72,7 +72,7 @@ RUN apk update && apk upgrade --available && \
   apk add --no-cache bash autoconf build-base composer libaio libnsl libc6-compat busybox-extras curl && \
   ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2 && \
   ln -s /lib64/ld-linux-x86-64.so.2 /usr/lib/ld-linux-x86-64.so.2 && \
-  ln -s /usr/lib/libnsl.so.2 /usr/lib/libnsl.so.1 && \
+  ln -s /usr/lib/libnsl.so.3.0.0 /usr/lib/libnsl.so.1 && \
   rm -rf /var/cache/apk/*  && \
   cd /tmp
 
