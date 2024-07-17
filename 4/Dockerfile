@@ -85,6 +85,7 @@ RUN \
   unzip -o -d      /usr/local/oracle       /tmp/sdk.zip && \
   unzip -o -d      /usr/local/oracle       /tmp/basic_lite.zip  && \
 # unzip -o -d      /usr/local/oracle       /tmp/sqlplus.zip && \
+  chown adminer:adminer /usr/local/oracle/instantclient_19_23/network/admin && \
   rm -rf           /tmp/*.zip && \
   mkdir            /etc/php.d && \
   echo "extension=oci8.so" > /etc/php.d/instantclient.ini
