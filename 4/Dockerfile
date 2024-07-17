@@ -69,8 +69,9 @@ ENV TNS_ADMIN       /usr/local/oracle/instantclient_19_23/network/admin
 ENV ORACLE_HOME     /usr/local/oracle/instantclient_19_23
 
 RUN apk update && apk upgrade --available && \
-  apk add --no-cache bash autoconf build-base composer libaio libnsl libc6-compat busybox-extras curl && \
+  apk add --no-cache autoconf g++ maker composer libaio libnsl libc6-compat curl && \
   ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2 && \
+  ln -s /lib64/ld-linux-x86-64.so.2 /usr/lib/ld-linux-x86-64.so.2 && \
   ln -s /usr/lib/libnsl.so.2 /usr/lib/libnsl.so.1 && \
   rm -rf /var/cache/apk/*  && \
   cd /tmp
@@ -92,7 +93,10 @@ RUN \
 
 ## Build OCI8 with PECL
 RUN \
-  C_INCLUDE_PATH=/usr/local/oracle/instantclient_19_23/sdk/include/ docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/local/oracle/instantclient_19_23 && docker-php-ext-install oci8
+  C_INCLUDE_PATH=/usr/local/oracle/instantclient_19_23/sdk/include/ docker-php-ext-configure oci8       --with-oci8=instantclient,/usr/local/oracle/instantclient_19_23 && \
+  docker-php-ext-install oci8 && \
+  C_INCLUDE_PATH=/usr/local/oracle/instantclient_19_23/sdk/include/ docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/usr/local/oracle/instantclient_19_23 && \
+  docker-php-ext-install pdo_oci 
 
 #  Clean up
 RUN \
